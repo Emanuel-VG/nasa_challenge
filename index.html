@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fondo Espacial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Fondo estrellado más realista con parpadeo */
+      body {
+        background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #222222 100%);
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .stars {
+        width: 2px;
+        height: 2px;
+        background: transparent;
+        box-shadow:
+          100px 200px #fff,
+          300px 400px #fff,
+          600px 800px #fff,
+          900px 1200px #fff,
+          400px 300px #fff,
+          1200px 100px #fff,
+          700px 900px #fff,
+          1100px 700px #fff;
+        animation: animStars 200s linear infinite;
+      }
+
+      @keyframes animStars {
+        from {
+          transform: translateY(0px);
+        }
+        to {
+          transform: translateY(-2000px);
+        }
+      }
+
+      .twinkle {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        box-shadow:
+          50px 50px 2px 2px white,
+          250px 150px 2px 2px white,
+          450px 350px 2px 2px white,
+          650px 250px 2px 2px white,
+          850px 450px 2px 2px white,
+          1050px 50px 2px 2px white;
+        animation: twinkle 2s infinite ease-in-out alternate;
+        opacity: 0.8;
+      }
+
+      @keyframes twinkle {
+        0% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="relative flex flex-col items-center justify-center">
+    <!-- Capa de estrellas -->
+    <div class="absolute inset-0 stars"></div>
+    <div class="absolute inset-0 twinkle"></div>
+
+    <!-- Texto central -->
+    <h1 class="text-white text-2xl mb-8 font-semibold z-10">texto</h1>
+
+    <!-- Imagen tuya (no en círculo) -->
+    <img
+      src="astro.jpg"
+      alt="mi imagen"
+      class="absolute top-5 right-5 w-28 h-28 object-contain z-10"
+    />
+
+    <!-- Botón Play -->
+    <div
+      id="playButton"
+      class="z-10 w-28 h-28 rounded-full border-4 border-white flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"
+    >
+      <div
+        class="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-1"
+      ></div>
+    </div>
+
+    
+    <script>
+      document.getElementById("playButton").addEventListener("click", () => {
+        document.body.innerHTML = `
+          <div class='flex items-center justify-center h-screen bg-black text-white text-3xl'>
+            🚀 Nueva pantalla — aquí puedes colocar tu contenido siguiente.
+          </div>`;
+      });
+    </script>
+  </body>
+</html>
