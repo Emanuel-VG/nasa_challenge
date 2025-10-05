@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satélite Protector Cósmico 🌞🛰️</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            background: radial-gradient(circle at center, #020024, #090979, #000);
+            color: #fff;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            margin-top: 20px;
+            text-shadow: 2px 2px #ff00ff;
+        }
+        canvas {
+            image-rendering: pixelated;
+            border: 4px solid #0ff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            background: radial-gradient(circle at 50% 60%, #001133, #000011);
+        }
+        
+        /* Contenedor principal para el quiz y la animación */
+        #quiz-and-animation-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinea arriba para que el texto no quede centrado verticalmente */
+            width: 90%;
+            max-width: 1200px; /* Ancho máximo para el contenedor */
+            margin-top: 20px;
+            gap: 20px; /* Espacio entre el texto y la animación */
+            position: relative; /* Para posicionar la nave */
+        }
+
+        /* Estilos del Quiz */
+        #main-content {
+            width: 60%; /* Ocupa más espacio para el texto */
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 2px solid #0ff;
+            box-shadow: 0 0 15px #0ff;
+            text-align: left;
+            font-size: 10px;
+            line-height: 1.6;
+            box-sizing: border-box; /* Incluye padding y border en el width */
+        }
+        .story-section {
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #090979;
+        }
+        .data-box {
+            background-color: #333;
+            border: 2px solid #ffd700;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .option-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .quiz-question .option-button {
+            width: auto; /* Para que los botones de respuesta se ajusten al contenido */
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #option-a, #q1-a, #q2-a { background-color: #00cc66; color: #000; }
+        #option-b, #q1-b, #q2-b { background-color: #cc0000; color: #fff; }
+        .option-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .result-message {
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success { background-color: #008000; border: 2px solid #0f0; }
+        .failure { background-color: #8b0000; border: 2px solid #f00; }
+        .summary-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .summary-list li {
+            margin-bottom: 5px;
+            text-shadow: 1px 1px #000;
+        }
+        .score-assessment {
+            padding: 15px;
+            margin: 20px 0;
+            border: 3px solid #0ff;
+            text-align: center;
+            background-color: #001133;
+        }
+        #play-again, #start-game, #restart-quiz {
+            background-color: #ffd700;
+            color: #000;
+            width: 80%;
+            margin: 15px auto;
+            display: block;
+        }
+
+        /* Estilos para la animación de la nave */
+        #animation-container {
+            width: 35%; /* Ocupa el espacio restante */
+            min-height: 400px; /* Asegura un alto mínimo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        #flying-ship-canvas {
+            border: none !important; /* Quitamos el borde del canvas p5.js para esta animación */
+            background: none !important; /* Fondo transparente */
+            box-shadow: none !important;
+        }
+
+        /* Ocultar elementos del juego cuando se muestra el quiz y viceversa */
+        #game-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>🛰️ Satélite Protector Cósmico 🌍</h1>
+
+    <div id="quiz-and-animation-container">
+        <div id="main-content">
+            </div>
+        <div id="animation-container">
+            </div>
+    </div>
+
+    <div id="game-container">
+        <p id="instructions" style="color:#0ff; font-size: 10px; margin-top: 10px;">¡Usa ← y → para mover el satélite!</p>
+        </div>
+
+    <script>
+        // --- VARIABLES GLOBALES DEL JUEGO (p5.js) ---
+        let earth, satellite, sun;
+        let electrons = [];
+        let damage = 0;
+        let score = 0;
+        let gameOver = false;
+        let sunMode = 'normal';
+        let lastModeSwitch = 0;
+        let maxDamage = 5;
+        let quizScore = 0; // Puntuación del quiz
+        let gameCanvasInstance; // Instancia del juego p5.js
+        let shipCanvasInstance; // Instancia de la nave voladora p5.js
+
+        // --- LÓGICA DE FLUJO Y QUIZ ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carga la animación de la nave al iniciar
+            shipCanvasInstance = new p5(flyingShipSketch, 'animation-container');
+            // Luego, muestra el quiz
+            loadQuiz();
+        });
+
+        // Respuestas correctas para cada pregunta del quiz
+        const QUIZ_ANSWERS = {
+            q1: 'A', // Respuesta: Bz es negativo, PERO el Bt (fuerza total) es bajo (5 nT) y NO hay CMEs detectadas. La amenaza es mínima.
+            q2: 'B'  // Respuesta: Las CME son eyecciones de masa coronal que pueden impactar la Tierra.
+        };
+        
+        function loadQuiz() {
+            quizScore = 0; // Reiniciar score del quiz
+            const quizHTML = `
+                <div class="story-section">
+                    <h2>LA HISTORIA:</h2>
+                    <p><strong>NOVA-7</strong> no era un satélite común. Era la primera inteligencia artificial espacial con capacidad de aprendizaje. "Pensar" era lo que mejor hacía, analizando millones de datos por segundo.</p>
+                    <p>Esta madrugada, mientras orbitaba sobre el Pacífico, sus sensores detectaron algo extraño: el campo magnético terrestre estaba fluctuando más de lo normal. "Análisis: posible tormenta geomagnética en desarrollo", procesó su sistema.</p>
+                    <p>Pero NOVA-7 tenía un conflicto interno. Por un lado, su programación de seguridad le decía: "Activar modo protección inmediatamente". Por otro lado, sabía que millones de personas en Sudamérica dependían de sus transmisiones para ver la final de la Copa Mundial de Fútbol.</p>
+                </div>
+                
+                <div class="story-section">
+                    <h2>TU HERRAMIENTA CLAVE:</h2>
+                    <p>☁️ CME Y CAMPO MAGNÉTICO (Bt y Bz negativos = mayor riesgo para satélites)</p>
+                    <div class="data-box">
+                        <strong>DATOS ACTUALES NOAA:</strong>
+                        <p>CAMPO MAGNÉTICO: <strong>Bt 5 nT, Bz -2 nT</strong> ⬤</p>
+                        <p>(Condiciones estables, sin CMEs detectadas)</p>
+                        <p>Viento solar: <strong>562 km/seg</strong> (normal)</p>
+                    </div>
+                </div>
+
+                <div class="story-section quiz-question" id="q1">
+                    <h2>PREGUNTA 1:</h2>
+                    <p>Basado en los datos actuales, ¿debe NOVA-7 activar el modo de protección?</p>
+                    <button id="q1-a" class="option-button" onclick="handleChoice('q1', 'A')">🟢 OPCIÓN A: No, mantener operaciones normales</button>
+                    <button id="q1-b" class="option-button" onclick="handleChoice('q1', 'B')">🔴 OPCIÓN B: Sí, activar protección máxima</button>
+                    <p id="q1-feedback" style="display:none; margin-top: 10px; font-weight: bold;"></p>
+                </div>
+
+                <div class="story-section quiz-question" id="q2" style="display:none;">
+                    <h2>PREGUNTA 2:</h2>
+                    <p>¿Qué son las "CMEs" mencionadas en la herramienta clave?</p>
+                    <button id="q2-a" class="option-button" onclick="handleChoice('q2', 'A')">🟢 OPCIÓN A: Corrientes Magnéticas Electrónicas</button>
+                    <button id="q2-b" class="option-button" onclick="handleChoice('q2', 'B')">🔴 OPCIÓN B: Eyecciones de Masa Coronal</button>
+                    <p id="q2-feedback" style="display:none; margin-top: 10px; font-weight: bold;"></p>
+                </div>
+                
+                <button id="submit-quiz" class="option-button" onclick="submitQuiz()" style="display:none;">VER RESULTADOS FINALES</button>
+            `;
+            document.getElementById('main-content').innerHTML = quizHTML;
+
+            // Mostrar la primera pregunta, el resto se activará progresivamente
+            document.getElementById('q1').style.display = 'block'; 
+        }
+
+        function handleChoice(questionId, choice) {
+            const feedbackElement = document.getElementById(`${questionId}-feedback`);
+            // Deshabilitar botones para evitar múltiples respuestas
+            document.querySelectorAll(`#${questionId} .option-button`).forEach(btn => btn.disabled = true);
+
+            if (choice === QUIZ_ANSWERS[questionId]) {
+                quizScore++;
+                feedbackElement.style.color = '#00ff00';
+                feedbackElement.innerText = '¡Correcto!';
+            } else {
+                feedbackElement.style.color = '#ff0000';
+                feedbackElement.innerText = 'Incorrecto.';
+            }
+            feedbackElement.style.display = 'block';
+
+            // Si es la pregunta 1, activar la pregunta 2 después de un breve delay
+            if (questionId === 'q1') {
+                setTimeout(() => {
+                    document.getElementById('q2').style.display = 'block';
+                    document.getElementById('submit-quiz').style.display = 'block';
+                }, 1500);
+            }
+        }
+
+        function submitQuiz() {
+            showResults(quizScore);
+        }
+
+        function showResults(finalQuizScore) {
+            let assessmentText;
+            if (finalQuizScore === 2) {
+                assessmentText = '¡METEORÓLOGO ESTELAR! Podrías trabajar en la NASA 🚀';
+            } else if (finalQuizScore === 1) {
+                assessmentText = '¡APRENDIZ ESPACIAL! Buen instinto, sigue practicando ⭐';
+            } else {
+                assessmentText = '¡ENTUSIASTA SOLAR! El Sol es complicado, no te rindas 😔';
+            }
+
+            const resultHTML = `
+                <div class="result-message ${finalQuizScore > 0 ? 'success' : 'failure'}">
+                    ¡Quiz Terminado!
+                </div>
+                <div class="story-section">
+                    <h2>🎯 RESULTADOS DEL QUIZ:</h2>
+                    <p>Puntos correctos: <strong>${finalQuizScore}/2</strong></p>
+                    <p>✨ <strong>CONCEPTO CLAVE APRENDIDO:</strong> Para la Pregunta 1, los datos (Bt 5 nT, Bz -2 nT, sin CMEs) indican condiciones mayormente estables. Una CME activa y un Bz más negativo con Bt alto serían señales de alerta.</p>
+                </div>
+                <div class="story-section">
+                    <h2>LO QUE APRENDIMOS HOY</h2>
+                    <ul class="summary-list">
+                        <li>1. El Viento Solar causa auroras boreales</li>
+                        <li>2. Las CMEs amenazan redes eléctricas</li>
+                        <li>3. Fulguraciones fuertes afectan GPS</li>
+                        <li>4. Tormentas solares = riesgo de radiación en vuelos</li>
+                        <li>5. Los satélites necesitan protección durante tormentas</li>
+                    </ul>
+                    <p>Base NASA: "Todos estos fenómenos son monitoreados por la NASA Heliophysics Fleet"</p>
+                </div>
+                <div class="story-section score-assessment">
+                    <h2>EVALUACIÓN DE CONOCIMIENTO</h2>
+                    <p class="assessment-text">
+                        ${assessmentText}
+                    </p>
+                </div>
+                <button id="start-game" class="option-button" onclick="startGame()">JUGAR EL JUEGO DE PROTECCIÓN</button>
+                <button id="restart-quiz" class="option-button" onclick="loadQuiz()">REINICIAR QUIZ</button>
+            `;
+            document.getElementById('main-content').innerHTML = resultHTML;
+        }
+
+        function startGame() {
+            document.getElementById('quiz-and-animation-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            
+            // Elimina el canvas de la nave si existe, para que no interfiera
+            if (shipCanvasInstance) {
+                shipCanvasInstance.remove();
+            }
+
+            // Inicia el juego p5.js
+            gameCanvasInstance = new p5(gameSketch, 'game-container'); 
+        }
+
+        // --- CÓDIGO p5.js PARA LA NAVE VOLADORA (Animación Lateral) ---
+        const flyingShipSketch = (p) => {
+            let shipX, shipY, angle;
+            let orbitRadius = 120; // Radio de órbita alrededor del centro del contenedor
+            let centerX, centerY;
+            let shipSize = 20;
+
+            p.setup = function() {
+                // El tamaño del canvas se ajustará al contenedor padre
+                let container = document.getElementById('animation-container');
+                p.createCanvas(container.offsetWidth, container.offsetHeight).parent('animation-container');
+                centerX = p.width / 2;
+                centerY = p.height / 2;
+                angle = 0;
+                p.noStroke();
+            };
+
+            p.draw = function() {
+                p.clear(); // Limpia solo este canvas
+                p.drawStarsAnimated(); // Estrellas para el fondo de esta animación
+
+                // Calcula la posición de la nave en la órbita
+                shipX = centerX + orbitRadius * p.cos(angle);
+                shipY = centerY + orbitRadius * p.sin(angle);
+
+                // Dibuja la nave
+                p.push();
+                p.translate(shipX, shipY);
+                p.rotate(angle + p.HALF_PI); // La nave apunta en la dirección de su órbita
+
+                // Cuerpo
+                p.fill(180, 180, 200);
+                p.rect(-shipSize / 2, -shipSize / 2, shipSize, shipSize * 0.8, 3);
+                
+                // Alas
+                p.fill(50, 150, 255);
+                p.rect(-shipSize * 1.2, -shipSize * 0.4, shipSize * 0.4, shipSize * 0.8, 2);
+                p.rect(shipSize * 0.8, -shipSize * 0.4, shipSize * 0.4, shipSize * 0.8, 2);
+
+                // Cabina/Ventana
+                p.fill(255);
+                p.ellipse(0, -shipSize * 0.2, shipSize * 0.4, shipSize * 0.4);
+
+                // Propulsores (pequeños rectángulos que simulan las toberas)
+                p.fill(255, 100, 0); // Color naranja/rojo para el fuego
+                p.rect(-shipSize / 2 + 2, shipSize * 0.4, shipSize / 4, shipSize * 0.3);
+                p.rect(shipSize / 2 - 2 - shipSize / 4, shipSize * 0.4, shipSize / 4, shipSize * 0.3);
+
+                p.pop();
+
+                angle += 0.03; // Velocidad de la órbita
+            };
+
+            p.drawStarsAnimated = function() {
+                for (let i = 0; i < 50; i++) {
+                    p.stroke(255, p.random(100, 200), 255, p.random(50, 150));
+                    p.point(p.random(p.width), p.random(p.height));
+                }
+            };
+        };
+
+
+        // --- CÓDIGO p5.js PARA EL JUEGO PRINCIPAL (gameSketch) ---
+        const gameSketch = (p) => {
+            
+            // Re-declaración de variables dentro del scope de p5.js
+            let earth, satellite, sun;
+            let electrons = [];
+            let damage = 0;
+            let score = 0;
+            let gameOver = false;
+            let sunMode = 'normal';
+            let lastModeSwitch = 0;
+            let maxDamage = 5;
+
+            p.setup = function() {
+                p.createCanvas(600, 400).parent('game-container'); // Adjuntar al contenedor del juego
+                earth = { x: p.width / 2, y: p.height - 60, r: 40 };
+                satellite = { x: p.width / 2, y: p.height - 120, r: 20, speed: 7 };
+                sun = { x: p.width / 2, y: 70, r: 50, rotation: 0 };
+                p.textFont('Press Start 2P');
+                p.textSize(12);
+                p.textAlign(p.LEFT, p.TOP);
+                p.frameRate(60);
+                p.loop();
+            };
+
+            p.draw = function() {
+                p.background(10, 5, 25);
+                p.drawStars();
+
+                let elapsed = p.millis() - lastModeSwitch;
+                if (elapsed > 20000) {
+                    sunMode = sunMode === 'normal' ? 'furia' : 'normal';
+                    lastModeSwitch = p.millis();
+                }
+
+                p.drawSun();
+
+                if (p.frameCount % (sunMode === 'normal' ? 60 : 20) === 0) {
+                    let count = sunMode === 'normal' ? 1 : 5;
+                    for (let i = 0; i < count; i++) {
+                        electrons.push({
+                            x: sun.x + p.random(-40, 40),
+                            y: sun.y,
+                            r: 6,
+                            speed: p.random(3, 6),
+                            color: p.color(255, p.random(150, 255), 0),
+                            points: sunMode === 'normal' ? 10 : 25
+                        });
+                    }
+                }
+                
+                p.drawEarth();
+                p.drawSatellite();
+
+                if (p.keyIsDown(p.LEFT_ARROW)) satellite.x -= satellite.speed;
+                if (p.keyIsDown(p.RIGHT_ARROW)) satellite.x += satellite.speed;
+                satellite.x = p.constrain(satellite.x, 30, p.width - 30);
+
+                for (let i = electrons.length - 1; i >= 0; i--) {
+                    let e = electrons[i];
+                    p.drawElectron(e);
+                    e.y += e.speed;
+
+                    // Colisión con satélite (Defensa)
+                    if (p.dist(e.x, e.y, satellite.x, satellite.y) < satellite.r + e.r) {
+                        electrons.splice(i, 1);
+                        score += e.points;
+                        p.fill(0, 255, 255, 150);
+                        p.ellipse(e.x, e.y, 20, 20);
+                        continue;
+                    }
+
+                    // Colisión con Tierra (Daño)
+                    if (p.dist(e.x, e.y, earth.x, earth.y) < earth.r + e.r) {
+                        electrons.splice(i, 1);
+                        damage++;
+                        p.fill(255, 0, 0, 180);
+                        p.ellipse(e.x, e.y, 15, 15);
+                    }
+                }
+
+                p.drawUI(score, damage, maxDamage, sunMode);
+
+                if (damage >= maxDamage) {
+                    gameOver = true;
+                    p.noLoop();
+                    p.drawGameOver(score);
+                }
+            };
+            
+            // Funciones de Dibujo (p. functions)
+            p.setShadow = function(color, blur, xOff, yOff) {
+                p.drawingContext.shadowColor = color;
+                p.drawingContext.shadowBlur = blur;
+                p.drawingContext.shadowOffsetX = xOff;
+                p.drawingContext.shadowOffsetY = yOff;
+            }
+
+            p.clearShadow = function() {
+                p.drawingContext.shadowBlur = 0;
+                p.drawingContext.shadowOffsetX = 0;
+                p.drawingContext.shadowOffsetY = 0;
+            }
+
+            p.drawSun = function() {
+                sun.rotation += sunMode === 'normal' ? 0.005 : 0.02;
+
+                p.push();
+                p.translate(sun.x, sun.y);
+                p.rotate(sun.rotation);
+                
+                // RAYOS (Corona)
+                p.setShadow(sunMode === 'normal' ? 'rgba(255, 200, 0, 0.9)' : 'rgba(255, 50, 0, 1)', 15, 0, 0);
+                let rayColor = sunMode === 'normal' ? p.color(255, 200, 0) : p.color(255, 100, 0);
+                for (let i = 0; i < 12; i++) {
+                    p.push();
+                    p.rotate(p.TWO_PI / 12 * i);
+                    p.fill(rayColor);
+                    p.triangle(0, -sun.r * 1.5, -5, -sun.r * 1.2, 5, -sun.r * 1.2);
+                    p.pop();
+                }
+                p.clearShadow();
+
+                // CUERPO CENTRAL (Fotosfera)
+                p.setShadow(sunMode === 'normal' ? 'rgba(255, 150, 0, 0.9)' : 'rgba(255, 0, 0, 1)', 20, 0, 0);
+                p.fill(sunMode === 'normal' ? p.color(255, 200, 0) : p.color(255, 60, 0));
+                p.ellipse(0, 0, sun.r * 2);
+
+                for (let i = sun.r; i > 0; i -= 5) {
+                    let inter = p.map(i, 0, sun.r, 0, 1);
+                    let c = p.lerpColor(p.color(255, 255, 100), rayColor, inter);
+                    p.fill(c);
+                    p.ellipse(0, 0, i * 2);
+                }
+                p.clearShadow();
+
+                // CARITA DEL SOL
+                p.fill(0);
+                p.ellipse(-15, -10, 8, 8);
+                p.ellipse(15, -10, 8, 8);
+                if (sunMode === 'normal') {
+                    p.stroke(0);
+                    p.strokeWeight(2);
+                    p.arc(0, 10, 20, 10, 0, p.PI);
+                } else {
+                    p.fill(0);
+                    p.arc(0, 15, 25, 10, p.PI, 0);
+                }
+                
+                p.pop();
+                sun.r = 50; 
+            }
+
+            p.drawEarth = function() {
+                p.push();
+                p.translate(earth.x, earth.y);
+                p.setShadow('rgba(0, 255, 255, 0.7)', 15, 0, 0);
+
+                p.fill(0, 100, 255);
+                p.ellipse(0, 0, earth.r * 2);
+                
+                p.fill(0, 200, 100);
+                p.ellipse(-10, -5, 15, 8);
+                p.ellipse(10, 8, 20, 10);
+                
+                for (let i = 0; i < 5; i++) {
+                    p.noFill();
+                    p.stroke(0, 255, 255, 50 - i * 10);
+                    p.ellipse(0, 0, (earth.r + i * 2) * 2);
+                }
+                
+                p.clearShadow();
+
+                p.fill(255);
+                p.ellipse(-8, -10, 8, 8);
+                p.ellipse(8, -10, 8, 8);
+                p.fill(0);
+                p.ellipse(-8, -10, 4, 4);
+                p.ellipse(8, -10, 4, 4);
+                
+                if (damage > 0) {
+                    p.noFill();
+                    p.stroke(255, 0, 0);
+                    p.strokeWeight(damage);
+                    p.line(0, -earth.r, 5, -earth.r + 5);
+                    p.line(-15, 10, -5, 10);
+                }
+                
+                p.pop();
+            }
+
+            p.drawSatellite = function() {
+                p.push();
+                p.translate(satellite.x, satellite.y);
+                p.setShadow('rgba(0, 255, 255, 0.8)', 10, 0, 0);
+
+                p.fill(180, 180, 200);
+                p.rect(-15, -8, 30, 16, 4);
+
+                p.fill(50, 150, 255);
+                p.rect(-35, -6, 15, 12, 2);
+                p.rect(20, -6, 15, 12, 2);
+
+                p.fill(255);
+                p.ellipse(0, 0, 10, 10);
+                
+                p.clearShadow();
+                p.pop();
+            }
+            
+            p.drawElectron = function(e) {
+                p.push();
+                p.setShadow('rgba(255, 100, 0, 0.9)', 8, 0, 0);
+                p.fill(e.color);
+                p.ellipse(e.x, e.y, e.r * 2);
+                p.clearShadow();
+                p.pop();
+            }
+
+            p.drawUI = function(currentScore, currentDamage, maxDamage, currentSunMode) {
+                p.fill(255, 0, 0);
+                p.text('DAÑO 💥: ' + currentDamage + '/' + maxDamage, 10, 20);
+                
+                p.fill(0, 255, 255);
+                p.text('PUNTOS ⭐: ' + currentScore, 10, 40);
+                
+                p.fill(currentSunMode === 'normal' ? 255 : 255, currentSunMode === 'normal' ? 255 : 0, 0);
+                p.text('SOL: ' + currentSunMode.toUpperCase(), p.width - 150, 20);
+            }
+
+            p.drawGameOver = function(finalScore) {
+                p.fill(255, 0, 0, 200);
+                p.rect(0, p.height / 2 - 50, p.width, 100);
+                p.fill(255);
+                p.textAlign(p.CENTER, p.CENTER);
+                p.textSize(24);
+                p.text('💥 GAME OVER 💥', p.width / 2, p.height / 2 - 15);
+                p.textSize(16);
+                p.text(`PUNTUACIÓN FINAL: ${finalScore}`, p.width / 2, p.height / 2 + 20);
+                p.textSize(12);
+                p.text('¡Actualiza para Volver a Empezar!', p.width / 2, p.height / 2 + 50);
+            }
+
+            p.drawStars = function() {
+                for (let i = 0; i < 100; i++) {
+                    p.stroke(255, p.random(150, 255));
+                    p.point(p.random(p.width), p.random(p.height));
+                }
+            }
+        };
+
+    </script>
+</body>
+</html>
