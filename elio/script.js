@@ -122,8 +122,13 @@ function changeScene(direction) {
     }
     
     // Actualizar índice de escena
-    if (direction === 'next' && currentScene < textScenes.size - 1) {
-        currentScene++;
+    if (direction === 'next') {
+        if (currentScene < textScenes.size - 1) {
+            currentScene++;
+        } else {
+            window.location.href = "../angel/sobres/index.html";
+            return;
+        }
     } else if (direction === 'prev' && currentScene > 0) {
         currentScene--;
     }
@@ -189,7 +194,8 @@ function revealOneCharacter(list) {
 
 function updateButtons() {
     prevBtn.disabled = currentScene === 0;
-    nextBtn.disabled = currentScene === textScenes.size - 1;
+    // No deshabilitar el botón de siguiente en la última escena
+    // nextBtn.disabled = currentScene === textScenes.size - 1;
 }
 
 // Añadir event listeners a los botones
