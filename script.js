@@ -72,35 +72,43 @@ const speeds = {
 // Definimos múltiples escenas de texto usando Map
 const textScenes = new Map([
     [0, [
-        { speed: speeds.slow, string: "¡Bienvenido, viajero!" },
-        { speed: speeds.pause, string: "a", pause: true },
-        { speed: speeds.normal, string: "AstronautiFantástico." },
-        { speed: speeds.fast, string: "Te daré una breve introducción.", classes: ["green"] },
+        { speed: speeds.slow, string: "¡Bienvenido, amigo Astronautifantástico! 🌟" },
+        { speed: speeds.pause, string: "", pause: true },
+        { speed: speeds.normal, string: "¡ALERTA DE MISIÓN!" },
+        { speed: speeds.fast, string: "El Sol está en estado CRÍTICO y necesitamos tu ayuda URGENTE.", classes: ["green"] },
         { speed: speeds.normal, string: "¿Estás listo?" }
     ]],
     [1, [
-        { speed: speeds.normal, string: "Este es un mundo lleno de" },
-        { speed: speeds.fast, string: "maravillas", classes: ["blue"] },
-        { speed: speeds.pause, string: "y", pause: true },
-        { speed: speeds.slow, string: "misterios" },
-        { speed: speeds.normal, string: "por descubrir." }
+        { speed: speeds.normal, string: "¿Qué está pasando?" },
+        { speed: speeds.fast, string: "Nuestra estrella está liberando tormentas solares masivas que afectan la Tierra.", classes: ["blue"] },
+        { speed: speeds.pause, string: "", pause: true },
+        { speed: speeds.slow, string: "Auroras espectaculares, satélites en peligro, comunicaciones interrumpidas..." },
+        { speed: speeds.fast, string: "¡y solo TÚ puedes ayudar!", classes: ["red"] },
     ]],
     [2, [
-        { speed: speeds.fast, string: "Tu nave está" },
-        { speed: speeds.slow, string: "lista", classes: ["orange"] },
-        { speed: speeds.pause, string: "para", pause: true },
-        { speed: speeds.normal, string: "despegar!" },
-        { speed: speeds.superFast, string: "¿A dónde quieres ir?", classes: ["purple"] }
+        { speed: speeds.fast, string: "Tu misión como METEORÓLOGO ESPACIAL Junior será usar herramientas científicas REALES de la NASA y NOAA para analizar:" },
+        { speed: speeds.slow, string: "· Viento solar 🌬", classes: ["orange"] },
+        { speed: speeds.slow, string: "· Fulguraciones solares 💥", classes: ["orange"] },
+        { speed: speeds.slow, string: "· Eyecciones de masa coronal 🧭", classes: ["orange"] },
+        { speed: speeds.slow, string: "· Manchas solares 🚦", classes: ["orange"] },
+        { speed: speeds.pause, string: "", pause: true }
     ]],
     [3, [
-        { speed: speeds.slow, string: "Recuerda:" },
-        { speed: speeds.pause, string: "el", pause: true },
-        { speed: speeds.normal, string: "universo" },
-        { speed: speeds.fast, string: "es", classes: ["red"] },
-        { speed: speeds.normal, string: "infinito" },
-        { speed: speeds.slow, string: "y lleno de posibilidades." }
-    ]]
-]);
+        { speed: speeds.slow, string: "¿A quién salvarás?" },
+        { speed: speeds.pause, string: "¿A quién salvarás?", pause: true },
+        { speed: speeds.normal, string: "· Agricultores con tractores GPS" },
+        { speed: speeds.normal, string: "· Astronautas en caminatas espaciales" },
+        { speed: speeds.normal, string: "· Satélites inteligentes en órbita" },
+]],
+[4, [
+        { speed: speeds.slow, string: "Cada decisión cuenta:" },
+        { speed: speeds.pause, string: "", pause: true },
+        { speed: speeds.normal, string: "¡Un consejo correcto los ayudará, uno incorrecto causa caos!" },
+        { speed: speeds.normal, string: "¿Tienes lo que se necesita para dominar el clima solar y convertirte en un HÉROE ESTELAR?" },
+        { speed: speeds.slow, string: "¡SÍ, ACEPTO EL DESAFÍO! 🚀", classes: ["green"] },
+]]
+]
+);
 
 let currentScene = -1;
 let characters = [];
