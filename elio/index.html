@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Expressive Speech Textbox Prototype</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap" rel="stylesheet">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+<link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+ 
+   <div class="container">
+        <div class="text">
+            <!-- El texto se inyectará aquí mediante JavaScript -->
+            <div class="scene-indicator">Escena 1 de 4</div>
+            <div class="navigation">
+                <button class="nav-btn prev" disabled></button>
+                <button class="nav-btn next"></button>
+            </div>
+            <svg class="corner" viewBox="0 0 65 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M35 3.5L65 6.5V62L0 0L35 3.5Z" fill="white"/>
+            </svg>
+        </div>
+        
+        <div class="image-container">
+            <img src="./meteorologo.png"class="meteorologo" alt="Astronauta" loading="lazy">
+        </div>
+    </div>
+
+    <!--
+<div>
+   <img src="./meteorologo.png" style="
+    width:100%; 
+    aspect-radio: 11/6;
+   /*posicionamelo la imagen a la derecha*/
+   position: absolute;
+    right: -7%;
+    bottom: -25%;
+    max-width: 40%;
+    z-index: 1;
+    " 
+
+    loading="lazy">
+   </div>
+-->
+    <script  src="./script.js"></script>
+
+
+
+  </body>
+  
+</html>

@@ -1,0 +1,218 @@
+/*.text span {
+   opacity: 0;
+}
+.text span.revealed {
+   opacity: 1;
+}
+.text span.green {
+   color: #27ae60;
+}
+.text span.red {
+   color: #ff0000;
+}
+
+
+/* Demo styles 
+body {
+   background: #3498db;
+   padding: 3em;
+   font-family: 'Sora', monospace;
+}
+.text {
+   font-size: 6vw;
+   word-spacing: 0.2em;
+   margin: 0 auto;
+   background: #fff;
+   padding: 1em;
+   border-bottom: 1vw solid #0e6dad;
+   position:relative;
+   line-height: 1.2em;
+}
+.corner {
+   position:absolute;
+   width: 10vw;
+   right:2vw;
+   bottom:0;
+   transform: translateY(80%); 
+}*/
+
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            padding: 2em 1em;
+            font-family: 'Sora', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .text {
+            font-size: clamp(1.2rem, 3vw, 2.2rem);
+            word-spacing: 0.2em;
+            background: #fff;
+            padding: 1em 1.5em 2em;
+            border-bottom: 0.5vw solid #0e6dad;
+            position: relative;
+            line-height: 1.4em;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2em;
+            min-height: 280px;
+        }
+
+        .text span {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .text span.revealed {
+            opacity: 1;
+        }
+
+        .text span.green {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .text span.red {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .text span.blue {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .text span.orange {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .text span.purple {
+            color: #9b59b6;
+            font-weight: bold;
+        }
+
+        .corner {
+            position: absolute;
+            width: 10vw;
+            max-width: 80px;
+            right: 2vw;
+            bottom: 0;
+            transform: translateY(80%);
+        }
+
+        .navigation {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: #0e6dad;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #095a94;
+            transform: scale(1.1);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .nav-btn.prev::after {
+            content: "<";
+        }
+
+        .nav-btn.next::after {
+            content: ">";
+        }
+
+        .scene-indicator {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            background: #f1f2f6;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .meteorologo {
+            width: 100%;
+            max-width: 350px;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1em 0.5em;
+            }
+            
+            .text {
+                padding: 1.5em 1em 3.5em;
+                min-height: 220px;
+            }
+            
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .meteorologo {
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .text {
+                font-size: 1.1rem;
+                min-height: 200px;
+                padding: 1em 0.8em 3em;
+            }
+            
+            .scene-indicator {
+                font-size: 0.8rem;
+            }
+            
+            .meteorologo {
+                max-width: 200px;
+            }
+        }
