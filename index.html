@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sol Animado con Estrellas</title>
+  <title>Sol Animado con Cometa</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body, html {
@@ -11,7 +11,7 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      background: black;
+      background: rgb(3, 1, 55);
       overflow: hidden;
     }
     #solCanvas {
@@ -29,11 +29,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 3vh; /* Texto más arriba */
+      padding-top: 3vh;
       pointer-events: none;
     }
     #playButton {
       pointer-events: auto;
+      transition: transform 0.3s ease;
+    }
+    #playButton:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -44,7 +48,7 @@
     <h1 class="text-6xl font-bold mb-20 tracking-wide drop-shadow-lg">Historias estelares</h1>
     <button
       id="playButton"
-      class="w-20 h-20 rounded-full border-4 border-white flex items-center justify-center hover:scale-110 transition-transform"
+      class="w-20 h-20 rounded-full border-4 border-white flex items-center justify-center transition-transform"
     >
       <div
         class="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"
@@ -63,7 +67,7 @@
     window.addEventListener("resize", resize);
     resize();
 
-    // 🌌 Generar estrellas
+    // 🌌 Estrellas
     const numStars = 500;
     const stars = Array.from({ length: numStars }, () => ({
       x: Math.random() * canvas.width,
@@ -89,7 +93,6 @@
         ctx.fillStyle = `rgba(255,255,255,${s.alpha * brightness})`;
         ctx.fill();
 
-        // Movimiento suave hacia la derecha
         s.x += s.speed;
         if (s.x > canvas.width + 5) s.x = -5;
       }
@@ -98,13 +101,12 @@
 
     // 🔥 Sol animado
     function drawSun() {
-      const cx = canvas.width * 0.25; // Sol a la izquierda
+      const cx = canvas.width * 0.25;
       const cy = canvas.height * 0.5;
       const baseRadius = Math.min(canvas.width, canvas.height) * 0.4;
-
       const pulse = 1 + 0.03 * Math.sin(time * 2);
 
-      // Fondo luminoso del sol
+      // Resplandor
       const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseRadius * 2);
       glow.addColorStop(0, "rgba(255,200,0,0.4)");
       glow.addColorStop(1, "rgba(255,100,0,0)");
@@ -113,19 +115,7 @@
       ctx.fillStyle = glow;
       ctx.fill();
 
-      // Núcleo del sol
-      const coreGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseRadius * 1.5);
-      coreGradient.addColorStop(0, "#fff59d");
-      coreGradient.addColorStop(0.4, "#ffe082");
-      coreGradient.addColorStop(0.8, "#ffb300");
-      coreGradient.addColorStop(1, "#f57c00");
-
-        //ctx.beginPath();
-        //ctx.arc(cx, cy, baseRadius * 0.7 * pulse, 0, Math.PI * 2);
-        //ctx.fillStyle = coreGradient;
-        //ctx.fill(); 
-
-      // Bordes flameantes con movimiento orgánico
+      // Bordes dinámicos
       const points = 160;
       ctx.beginPath();
       for (let i = 0; i <= points; i++) {
@@ -158,9 +148,41 @@
       ctx.stroke();
     }
 
+    // ☄️ Cometa
+    const cometaImg = new Image();
+    cometaImg.src = "cometa.png";
+
+    const cometa = {
+      x: 100,
+      y: canvas.height - 100,
+      angle: -0.6, // inclinación inicial mirando hacia arriba a la derecha
+      flying: false,
+      vx: 10,
+      vy: -8,
+      rotationSpeed: 0.02
+    };
+
+    function drawCometa() {
+      if (!cometaImg.complete) return;
+
+      ctx.save();
+      ctx.translate(cometa.x, cometa.y);
+      ctx.rotate(cometa.angle);
+      ctx.drawImage(cometaImg, -40, -40, 80, 80);
+      ctx.restore();
+
+      if (cometa.flying) {
+        cometa.x += cometa.vx;
+        cometa.y += cometa.vy;
+        cometa.angle += cometa.rotationSpeed;
+        cometa.vy -= 0.15; // ligera aceleración hacia arriba
+      }
+    }
+
     function animate() {
       drawStars();
       drawSun();
+      drawCometa();
       time += 0.02;
       requestAnimationFrame(animate);
     }
@@ -168,7 +190,7 @@
     animate();
 
     document.getElementById("playButton").addEventListener("click", () => {
-      alert("Presionaste Play");
+      cometa.flying = true;
     });
   </script>
 </body>
