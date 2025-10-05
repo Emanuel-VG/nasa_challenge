@@ -1,0 +1,20 @@
+body{
+    background-color: #8fe3ff;
+    color: white;
+}
+.map-argentina{
+    width: 400px;
+    /* height: 100% */
+    display: block;
+    margin: 0 auto;
+    z-index: -1;
+}
+.girl{
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    z-index: 2;
+}
+/* img{
+    width: 50%;
+} */
