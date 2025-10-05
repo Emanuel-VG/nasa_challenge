@@ -1,7 +1,26 @@
+html {
+    scroll-behavior: smooth;
+}
 body{
-    background-color: #8fe3ff;
+    background-color: #0b0033;
     color: white;
     font-family: 'Press Start 2P', cursive;
+    padding-top: 120px; /* Prevent content from hiding behind fixed title */
+}
+
+.main-title {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 2.2em;
+  color: #ffe600;
+  text-shadow: 3px 3px #ff5500, 0 0 15px #ff8c00;
+  z-index: 100;
+  background-color: transparent;
+  padding: 20px 0;
+  margin: 0;
 }
 .map-argentina{
     width: 400px;
@@ -21,11 +40,25 @@ body{
 } */
 
 .button-container {
-  text-align: center; /* Center the buttons */
-  margin: 20px 0;
+  position: fixed;
+  top: 130px; /* Aligned with text-two */
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  padding-right: 20px; /* Match text indentation */
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 20;
+}
+
+.button-container.visible {
+  opacity: 1;
 }
 
 .btn {
+  font-family: 'Press Start 2P', cursive;
   position: relative;
   padding: 1rem 2rem;
   font-size: 1rem;
@@ -38,8 +71,35 @@ body{
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease;
-  width: 400px; /* Set a fixed width for both buttons */
+  width: 300px; /* Set a fixed width for both buttons */
   margin: 0 10px; /* Add some space between the buttons */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.btn-emphasis {
+  font-size: 2em;
+}
+
+.btn-regular {
+  font-size: 0.6em;
+}
+
+#btn-yes {
+  /* background-color: #28a745; */
+  background-color: #4ac967;
+  border-color: #218838;
+  color: #ffffff;
+}
+
+#btn-no {
+  /* background-color: #dc3545; */
+  background-color: #fe5767;
+  border-color: #c82333;
+  color: #ffffff;
 }
 
 .glitch {
@@ -73,28 +133,50 @@ body{
   }
 }
 
-.text-one, .text-two {
+.text-one, .text-two, .text-three,.text-four,.text-five,.text-six,.text-seven {
   position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 24px;
+  left: 25px;
+  font-size: 14px;
   background-color: rgba(0, 0, 0, 0.7);
   padding: 15px;
   border-radius: 5px;
   z-index: 20;
   opacity: 0;
   overflow: hidden; /* Ensures the text is not seen before the animation */
-  white-space: nowrap; /* Keeps the text on a single line */
   border-right: .15em solid orange; /* The typewriter cursor */
   letter-spacing: .15em; /* Adjust as needed */
   animation: typing 3.5s steps(40, end) forwards, blink-caret .75s step-end infinite;
+  max-width: 50vw;
+}
+
+.text-one {
+  top: 70px;
 }
 
 .text-two {
-  top: 90px; /* Position below the first text */
+  top: 130px; /* Significantly increased top margin for more separation */
+  animation-delay: 2s; /* Start after the first animation finishes */
+}
+.text-three {
+  top: 210px; /* Significantly increased top margin for more separation */
   animation-delay: 4s; /* Start after the first animation finishes */
 }
-
+.text-four {
+  top: 290px; /* Significantly increased top margin for more separation */
+  animation-delay: 6s; /* Start after the first animation finishes */
+}
+.text-five {
+  top: 370px; /* Significantly increased top margin for more separation */
+  animation-delay: 8s; /* Start after the first animation finishes */
+}
+.text-six {
+  top: 450px; /* Significantly increased top margin for more separation */
+  animation-delay: 10s; /* Start after the first animation finishes */
+}
+.text-seven {
+  top: 530px; /* Significantly increased top margin for more separation */
+  animation-delay: 12s; /* Start after the first animation finishes */
+}
 @keyframes typing {
   from { width: 0 }
   to { width: 100%; opacity: 1; }
@@ -107,10 +189,19 @@ body{
 }
 
 .result-one, .result-two {
+  position: fixed;
+  top: 240px; /* Below buttons */
+  right: 20px;
+  width: 620px; /* Adjust width to contain text */
   text-align: center;
-  font-size: 40px;
+  font-size: 15px;
   margin: 20px 0;
   z-index: 2;
+  background-color: rgba(2, 2, 2, 0.7);
+  color: #ff8c00;
+  padding: 15px;
+  border-radius: 5px;
+  right: 20px;
 }
 
 .result-one, .result-two {
@@ -131,17 +222,30 @@ body{
 
 .superior {
   position: absolute;
-  bottom: 50px;   /* Position from the bottom */
+  bottom: 150px;   /* Position from the bottom */
   left: 50%;      /* Center horizontally */
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
   width: 100px;
-  opacity: 0.8;
+  /* opacity: 0.8; */
   z-index: 2;
+}
+
+.grow-animation {
+    animation: grow 1.5s ease-in-out forwards;
+}
+
+@keyframes grow {
+    from {
+        transform: translateX(-50%) scale(1);
+    }
+    to {
+        transform: translateX(-50%) scale(4);
+    }
 }
 
 .tip {
   position: fixed;
-  top: 25vh; /* 2/8 of the viewport height */
+  top: calc(25vh + 50px); /* Moved down by 50px */
   left: 0;
   transform: translateX(calc(-100% + 50px)); /* Show 50px as a tab */
   transition: transform 0.5s ease-in-out;
@@ -149,13 +253,14 @@ body{
   padding: 10px;
   padding-right: 50px; /* Add space for the tab text */
   border-radius: 0 5px 5px 0;
-  z-index: 10;
+  z-index: 30;
   width: 300px; /* Set a width to allow text wrapping */
   cursor: pointer;
 }
 
 .tip::after {
-  content: 'T\a I\a P'; /* Vertical "tip" text */
+  content: 'T\a I\a P';
+  /* content: 'TIP'; */
   white-space: pre;
   position: absolute;
   top: 50%;
