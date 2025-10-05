@@ -5,23 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
     <title>Document</title>
   </head>
+
   <body>
-    <img class="map-argentina" src="argentinamap.png" alt="" />
-    <img class="girl" src="girl.png" alt="" />
+    <div class="contenedor">
+      <img src="argentinamap.png" class="fondo" alt="Imagen de fondo" />
+      <img src="girl.png" class="superior" alt="Imagen encima" />
+    </div>
     <p class="tip">
       EL VIENTO SOLAR (Cuando el viento solar es FUERTE, crea auroras visibles)
     </p>
     <p class="text-one">Carla vive en la Patagonia</p>
     <p class="text-two">Es aficionada a la Astronomia</p>
-    <button>"¡SÍ! Auroras seguras - El desvelo valdrá la pena"</button>
-    <button>"NO habrá auroras - Mejor ir a dormir"</button>
-    <p class="result-one">
+    <div class="button-container">
+      <button id="btn-yes" class="btn glitch">
+        <span>¡SÍ! Auroras seguras - El desvelo valdrá la pena</span>
+      </button>
+      <button id="btn-no" class="btn glitch">
+        <span>NO habrá auroras - Mejor ir a dormir</span>
+      </button>
+    </div>
+    <p id="result-one" class="result-one">
       ¡INCREÍBLE DECISIÓN! Carla capturó auroras que bailaban en el cielo. Fue
       una noche espléndida. Su mamá te manda las gracias con un abrazo.
     </p>
-    <p class="result-two">
+    <p id="result-two" class="result-two">
       ¡OPORTUNIDAD PERDIDA! 😴 "¡Rayos y centellas! Carla se quedó en casa
       durmiendo, soñando con Auroras en lugar de fotografiarlas. Esperemos que
       la próxima no se las pierda

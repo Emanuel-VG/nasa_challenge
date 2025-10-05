@@ -1,6 +1,7 @@
 body{
     background-color: #8fe3ff;
     color: white;
+    font-family: 'Press Start 2P', cursive;
 }
 .map-argentina{
     width: 400px;
@@ -18,3 +19,157 @@ body{
 /* img{
     width: 50%;
 } */
+
+.button-container {
+  text-align: center; /* Center the buttons */
+  margin: 20px 0;
+}
+
+.btn {
+  position: relative;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222222;
+  background: none;
+  background-color:#ffffff;
+  border: 2px solid #646cff;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  width: 400px; /* Set a fixed width for both buttons */
+  margin: 0 10px; /* Add some space between the buttons */
+}
+
+.glitch {
+  text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+    -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+    0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+}
+
+.glitch:hover {
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-4px, 4px);
+  }
+  40% {
+    transform: translate(-4px, -4px);
+  }
+  60% {
+    transform: translate(4px, 4px);
+  }
+  80% {
+    transform: translate(4px, -4px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.text-one, .text-two {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 20;
+  opacity: 0;
+  overflow: hidden; /* Ensures the text is not seen before the animation */
+  white-space: nowrap; /* Keeps the text on a single line */
+  border-right: .15em solid orange; /* The typewriter cursor */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: typing 3.5s steps(40, end) forwards, blink-caret .75s step-end infinite;
+}
+
+.text-two {
+  top: 90px; /* Position below the first text */
+  animation-delay: 4s; /* Start after the first animation finishes */
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100%; opacity: 1; }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+}
+
+.result-one, .result-two {
+  text-align: center;
+  font-size: 40px;
+  margin: 20px 0;
+  z-index: 2;
+}
+
+.result-one, .result-two {
+  display: none; /* Hide results by default */
+}
+.contenedor {
+      position: relative;
+      width: 400px;
+      height: auto;
+      margin: 50px auto; /* Center the container and add some vertical margin */
+    }
+
+.fondo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.superior {
+  position: absolute;
+  bottom: 50px;   /* Position from the bottom */
+  left: 50%;      /* Center horizontally */
+  transform: translateX(-50%);
+  width: 100px;
+  opacity: 0.8;
+  z-index: 2;
+}
+
+.tip {
+  position: fixed;
+  top: 25vh; /* 2/8 of the viewport height */
+  left: 0;
+  transform: translateX(calc(-100% + 50px)); /* Show 50px as a tab */
+  transition: transform 0.5s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  padding-right: 50px; /* Add space for the tab text */
+  border-radius: 0 5px 5px 0;
+  z-index: 10;
+  width: 300px; /* Set a width to allow text wrapping */
+  cursor: pointer;
+}
+
+.tip::after {
+  content: 'T\a I\a P'; /* Vertical "tip" text */
+  white-space: pre;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 16px;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.tip:hover {
+  transform: translateX(0);
+}
+
+.tip:hover::after {
+  display: none; /* Hide the "tip" text on hover */
+}
